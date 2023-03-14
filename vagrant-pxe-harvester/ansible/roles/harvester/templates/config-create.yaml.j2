@@ -3,7 +3,7 @@
 scheme_version: 1
 token: {{ settings['harvester_config']['token'] }}
 os:
-  hostname: harvester-node-0
+  hostname: harvester-{{ settings['job']['user_id'] }}-{{ settings['job']['cluster_id'] }}-0
   ssh_authorized_keys:
 {% for ssh_key in settings['harvester_config']['ssh_authorized_keys'] %}
     - {{ ssh_key }}

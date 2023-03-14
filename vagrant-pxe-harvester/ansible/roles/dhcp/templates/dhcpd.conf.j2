@@ -38,7 +38,7 @@ host harvest_vip {
 host harvest_node_{{ node_number }} {
     hardware ethernet {{ settings['harvester_network_config']['cluster'][node_number]['mac'] }};
     fixed-address {{ settings['harvester_network_config']['cluster'][node_number]['ip'] }};
-    server-name "harvester-node-{{ node_number }}";
+    server-name "harvester-{{ settings['job']['user_id'] }}-{{ settings['job']['cluster_id'] }}-{{ node_number }}";
 }
 
 {% endfor %}

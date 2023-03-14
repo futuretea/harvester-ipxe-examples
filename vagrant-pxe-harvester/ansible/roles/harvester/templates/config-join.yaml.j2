@@ -4,7 +4,7 @@ scheme_version: 1
 server_url: https://{{ settings['harvester_network_config']['vip']['ip'] }}:443
 token: {{ settings['harvester_config']['token'] }}
 os:
-  hostname: harvester-node-{{ node_number }}
+  hostname: harvester-{{ settings['job']['user_id'] }}-{{ settings['job']['cluster_id'] }}-{{ node_number }}
   ssh_authorized_keys:
 {% for ssh_key in settings['harvester_config']['ssh_authorized_keys'] %}
     - {{ ssh_key }}

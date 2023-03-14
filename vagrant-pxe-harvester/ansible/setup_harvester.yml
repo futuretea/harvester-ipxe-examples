@@ -48,6 +48,8 @@
     include: boot_harvester_node.yml
     vars:
       node_number: "{{ item }}"
+      user_id: "{{ job.user_id }}"
+      cluster_id: "{{ job.cluster_id }}"
     with_sequence: 0-{{ harvester_cluster_nodes|int - 1 }}
 
   - name: create "Installation Completed" message

@@ -33,7 +33,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     pxe_server.vm.hostname = 'pxe-server'
     pxe_server.vm.network 'private_network',
       ip: @settings['harvester_network_config']['dhcp_server']['ip'],
-      libvirt__network_name: 'harvester',
+      libvirt__network_name: "harvester-#{@settings['job']['user_id']}-#{@settings['job']['cluster_id']}",
       # don't enable DHCP as this node will have it's now DHCP server for iPXE
       # boot
       libvirt__dhcp_enabled: false
@@ -55,11 +55,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   cluster_node_index = @settings['harvester_cluster_nodes'] - 1
   (0..cluster_node_index).each do |node_number|
-    vm_name = "harvester-node-#{node_number}"
-    config.vm.define vm_name, autostart: false do |harvester_node|
-      harvester_node.vm.hostname = "harvester-node-#{node_number}"
+    vm_name = "harvester-#{@settings['job']['user_id']}-#{@settings['job']['cluster_id']}-#{node_number}"
+    config.vm.define vm_name, autostart: true do |harvester_node|
+      harvester_node.vm.hostname = "harvester-#{@settings['job']['user_id']}-#{@settings['job']['cluster_id']}-#{node_number}"
       harvester_node.vm.network 'private_network',
-        libvirt__network_name: 'harvester',
+        libvirt__network_name: "harvester-#{@settings['job']['user_id']}-#{@settings['job']['cluster_id']}",
         mac: @settings['harvester_network_config']['cluster'][node_number]['mac']
 
       harvester_node.vm.provider :libvirt do |libvirt|
@@ -71,7 +71,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           type: 'qcow2',
           bus: 'virtio',
           device: 'vda'
-        boot_network = {'network' => 'harvester'}
+        boot_network = {'network' => "harvester-#{@settings['job']['user_id']}-#{@settings['job']['cluster_id']}"}
         libvirt.boot 'hd'
         libvirt.boot boot_network
         # NOTE: default to UEFI boot. Comment this out for legacy BIOS.
